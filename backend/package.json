@@ -9,6 +9,10 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/memory-cache": "^0.2.6",
     "bcrypt": "^5.1.1",
     "concurrently": "^9.1.2",
     "dotenv": "^16.5.0",
