@@ -3,11 +3,7 @@ import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-export const authentication = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const authentication = (req, res, next) => {
   const header = req.headers.authorization;
   if (!header) {
     return res.status(401).json({ message: "Unauthorized" });
