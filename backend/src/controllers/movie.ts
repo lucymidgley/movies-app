@@ -4,7 +4,7 @@ import { AppDataSource } from "../data-source";
 import { Movie } from "../entity/Movie";
 
 export class MovieController {
-  static async getMovies(req: Request, res: Response) {
+  static async getMovies(req, res) {
     const data = cache.get("data");
     if (data) {
       console.log("serving from cache");
@@ -21,7 +21,7 @@ export class MovieController {
       });
     }
   }
-  static async createMovie(req: Request, res: Response) {
+  static async createMovie(req, res) {
     const { title, description, director, year, rating, image, cast } =
       req.body;
     const movie = new Movie();
@@ -39,7 +39,7 @@ export class MovieController {
       .json({ message: "Movie created successfully", movie });
   }
 
-  static async updateMovie(req: Request, res: Response) {
+  static async updateMovie(req, res) {
     const { id } = req.params;
     const { title, description, director, year, rating, image, cast } =
       req.body;
@@ -60,7 +60,7 @@ export class MovieController {
       .json({ message: "Movie updated successfully", movie });
   }
 
-  static async deleteMovie(req: Request, res: Response) {
+  static async deleteMovie(req, res) {
     const { id } = req.params;
     const movieRepository = AppDataSource.getRepository(Movie);
     const movie = await movieRepository.findOne({

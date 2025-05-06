@@ -4,7 +4,7 @@ import { User } from "../entity/User";
 import { encrypt } from "../helpers/helpers";
 
 export class AuthController {
-  static async login(req: Request, res: Response) {
+  static async login(req, res) {
     try {
       const { email, password } = req.body;
       if (!email || !password) {
@@ -29,7 +29,7 @@ export class AuthController {
     }
   }
 
-  static async getProfile(req: Request, res: Response) {
+  static async getProfile(req, res) {
     if (!req[" currentUser"]) {
       return res.status(401).json({ message: "Unauthorized" });
     }

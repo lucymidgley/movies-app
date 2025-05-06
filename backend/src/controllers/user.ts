@@ -6,7 +6,7 @@ import { UserResponse } from "../dto/user";
 import * as cache from "memory-cache";
 
 export class UserController {
-  static async signup(req: Request, res: Response) {
+  static async signup(req, res) {
     const { name, email, password, role } = req.body;
     const encryptedPassword = await encrypt.encryptPassword(password);
     const user = new User();
@@ -27,7 +27,7 @@ export class UserController {
       .status(200)
       .json({ message: "User created successfully", token, userDataSent });
   }
-  static async getUsers(req: Request, res: Response) {
+  static async getUsers(req, res) {
     const data = cache.get("data");
     if (data) {
       console.log("serving from cache");
@@ -45,7 +45,7 @@ export class UserController {
       });
     }
   }
-  static async updateUser(req: Request, res: Response) {
+  static async updateUser(req, res) {
     const { id } = req.params;
     const { name, email } = req.body;
     const userRepository = AppDataSource.getRepository(User);
@@ -58,7 +58,7 @@ export class UserController {
     res.status(200).json({ message: "update", user });
   }
 
-  static async deleteUser(req: Request, res: Response) {
+  static async deleteUser(req, res) {
     const { id } = req.params;
     const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({
