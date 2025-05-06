@@ -15,7 +15,7 @@ const { PORT = 3000 } = process.env;
 app.use("/auth", userRouter);
 app.use("/api", movieRouter);
 
-app.get("*", (req: Request, res: Response) => {
+app.get(/(.*)/, (req: Request, res: Response) => {
   res.status(505).json({ message: "Bad Request" });
 });
 

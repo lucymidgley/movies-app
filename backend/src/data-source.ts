@@ -18,14 +18,14 @@ const {
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  host: DB_HOST,
-  port: parseInt(DB_PORT || "5432"),
-  username: POSTGRES_USER,
-  password: POSTGRES_PASSWORD,
-  database: POSTGRES_DB,
+  host: 'postgres_db',
+  port: parseInt("5432"),
+  username: 'postgres',
+  password: 'password',
+  database: 'mydatabase',
   synchronize: NODE_ENV === "dev" ? false : false,
   logging: NODE_ENV === "dev" ? false : false,
   entities: [User, Movie],
-  migrations: [__dirname + "/migration/*.ts"],
+  migrations: [__dirname + "/migrations/*.ts"],
   subscribers: [],
 });
