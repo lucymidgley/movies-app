@@ -5,7 +5,7 @@ services:
 
   app:
 
-    build: .
+    build: ./backend
 
     ports:
 
@@ -30,6 +30,7 @@ services:
       POSTGRES_USER: postgres
 
       POSTGRES_PASSWORD: password
+
 
     ports:
 

@@ -7,16 +7,22 @@ import { Movie } from "./entity/Movie";
 
 dotenv.config();
 
-const { DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_DATABASE, NODE_ENV } =
-  process.env;
+const {
+  DB_HOST,
+  DB_PORT,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  NODE_ENV,
+} = process.env;
 
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: DB_HOST,
   port: parseInt(DB_PORT || "5432"),
-  username: DB_USERNAME,
-  password: DB_PASSWORD,
-  database: DB_DATABASE,
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DB,
   synchronize: NODE_ENV === "dev" ? false : false,
   logging: NODE_ENV === "dev" ? false : false,
   entities: [User, Movie],
