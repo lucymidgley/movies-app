@@ -20,9 +20,6 @@ import {
     @Column({ nullable: false })
     password: string;
   
-    @Column({ default: "user" })
-    role: string;
-  
     @CreateDateColumn()
     createdAt: Date;
   

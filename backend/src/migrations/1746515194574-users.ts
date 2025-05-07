@@ -10,7 +10,6 @@ export class Users1746515194574 implements MigrationInterface {
                   "name" character varying NOT NULL,
                   "email" character varying NOT NULL,
                   "password" character varying NOT NULL,
-                  "role"  character varying NOT NULL DEFAULT 'user',
                   "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                   "updatedAt" TIMESTAMP NOT NULL DEFAULT now()
                 )`
