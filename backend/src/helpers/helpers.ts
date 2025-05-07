@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { UserResponse } from "../dto/user";
 
 dotenv.config();
-const { JWT_SECRET = "" } = process.env;
+const JWT_SECRET = "devsecret"
 export class encrypt {
   static async encryptPassword(password: string) {
     return bcrypt.hashSync(password, 12);
@@ -14,6 +14,6 @@ export class encrypt {
   }
 
   static generateToken(payload: UserResponse) {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
+    return jwt.sign({ name: payload.name, id: payload.id, email: payload.email }, JWT_SECRET, { expiresIn: 3600 });
   }
 }
