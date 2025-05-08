@@ -1,26 +1,19 @@
-
 version: '3.8'
 
 services:
   frontend:
-   
+
     image: frontend
 
     build: ./frontend
-      
-    environment:
-      
-      NODE_ENV: production
-    
-    ports:
-    
-      - 3000:3000
-      - 3001:3001
 
-    volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
-    command: npm run dev -- --host 0.0.0.0
+    environment:
+
+      NODE_ENV: production
+
+    ports:
+
+      - 3000:3000
 
   backend:
 
@@ -49,7 +42,6 @@ services:
       POSTGRES_USER: postgres
 
       POSTGRES_PASSWORD: password
-
 
     ports:
 
