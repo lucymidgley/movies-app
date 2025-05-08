@@ -10,6 +10,7 @@ import { SignIn } from './pages/SignIn/SignIn';
 import { HomePage } from './pages/Home.page';
 import { Register } from './pages/Register/Register';
 import { NotFound } from './pages/NotFound/NotFound';
+import { NavBar } from './components/NavBar/NavBar';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
@@ -23,12 +24,14 @@ export default function App() {
   }, []);
 
   if (!!user) {
-    return (<MantineProvider theme={theme}>
-      <Routes >
-        <Route path="/" element={<HomePage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes >
-    </MantineProvider >)
+    return (
+      <MantineProvider theme={theme}>
+        <NavBar />
+        <Routes >
+          <Route path="/" element={<HomePage />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes >
+      </MantineProvider >)
   }
 
   return (
