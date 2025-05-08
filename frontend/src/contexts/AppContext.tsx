@@ -3,7 +3,6 @@ import { AsyncActionHandlers, useReducerAsync } from "use-reducer-async";
 import { api } from '../api';
 import { handleError } from "../helpers/errorHandler";
 import { User } from "../types";
-import * as cookie from 'cookie';
 
 
 export type PageState = {
@@ -57,75 +56,72 @@ export const asyncActionHandlers: AsyncActionHandlers<
 > = {
   SIGN_IN:
     ({ dispatch }) =>
-    async (action: { email: string; password: string }) => {
-      const { email, password } = action;
-      dispatch({ type: "BEGIN_REQUEST" });
-      try {
-        const response = await api.users.signIn({ user: { email, password } });
-        const token = response.token;
-
-        const cookieString = cookie.serialize('jwtToken', token, { secure: true });
-        dispatch({
-          type: "SET_USER",
-          user: response?.user,
-        });
-        window.location.href = "/";
-      } catch (e) {
-        console.error(e);
-        const error = handleError(e);
-        dispatch({ type: "REQUEST_FAILURE", error });
-      }
-    },
+      async (action: { email: string; password: string }) => {
+        const { email, password } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          const response = await api.users.signIn({ email, password });
+          dispatch({
+            type: "SET_USER",
+            user: response?.user,
+          });
+          window.location.href = "/";
+        } catch (e) {
+          console.error(e);
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
   SIGN_UP:
     ({ dispatch }) =>
-    async (action: { email: string; password: string; name: string }) => {
-      const { email, password, name } = action;
-      dispatch({ type: "BEGIN_REQUEST" });
-      try {
-        await api.users.create({ email, password, name } );
-        dispatch({
-          type: "REQUEST_SUCCESS",
-        });
-        window.location.href = "/";
-      } catch (e) {
-        const error = handleError(e);
-        dispatch({ type: "REQUEST_FAILURE", error });
-      }
-    },
+      async (action: { email: string; password: string; name: string }) => {
+        const { email, password, name } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          await api.users.create({ email, password, name });
+          dispatch({
+            type: "REQUEST_SUCCESS",
+          });
+          window.location.href = "/";
+        } catch (e) {
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
 };
 
 const PageContext = createContext<{
-    state: PageState;
-    dispatch: Dispatch<Action>;
-  }>({
-    state: initialState,
-    dispatch: () => undefined,
-  });
-  
-  export const useAppContext = () => useContext(PageContext);
-  
-  type Props = {
-    overrideInitialState?: PageState;
-    dispatchOverride?: Dispatch<Action>;
-    children: ReactNode
-  };
-  
-  export const AppProvider: FC<Props> = ({
-    dispatchOverride,
-    children,
-    ...overrideInitialState
-  }) => {
-    const [state, dispatch] = useReducerAsync<
-      Reducer<PageState, SyncAction>,
-      AsyncAction,
-      Action
-    >(reducer, { ...initialState, ...overrideInitialState }, asyncActionHandlers);
-  
-    const d = dispatchOverride || dispatch;
-  
-    return (
-      <PageContext.Provider value={{ state, dispatch: d }}>
-        {children}
-      </PageContext.Provider>
-    );
-  };
+  state: PageState;
+  dispatch: Dispatch<Action>;
+}>({
+  state: initialState,
+  dispatch: () => undefined,
+});
+
+export const useAppContext = () => useContext(PageContext);
+
+type Props = {
+  overrideInitialState?: PageState;
+  dispatchOverride?: Dispatch<Action>;
+  children: ReactNode
+};
+
+export const AppProvider: FC<Props> = ({
+  dispatchOverride,
+  children,
+  ...overrideInitialState
+}) => {
+  const [state, dispatch] = useReducerAsync<
+    Reducer<PageState, SyncAction>,
+    AsyncAction,
+    Action
+  >(reducer, { ...initialState, ...overrideInitialState }, asyncActionHandlers);
+
+  const d = dispatchOverride || dispatch;
+
+  return (
+    <PageContext.Provider value={{ state, dispatch: d }}>
+      {children}
+    </PageContext.Provider>
+  );
+};
