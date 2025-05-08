@@ -7,8 +7,15 @@ import { movieRouter } from "./routes/movie";
 import "reflect-metadata";
 import { errorHandler } from "./middleware/errorHandler";
 dotenv.config();
+const cors = require('cors')
 
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow requests from this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow these HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+  credentials: true // Allow cookies to be sent
+}));
 app.use(express.json());
 app.use(errorHandler);
 const { PORT = 8080 } = process.env;
