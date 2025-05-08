@@ -46,7 +46,7 @@ export function Register() {
       </Title>
 
       <Text className={classes.subtitle}>
-        Already have an account? <Anchor component={Link} to="/login">Sign in</Anchor>
+        Already have an account? <Anchor component={Link} to="/">Sign in</Anchor>
       </Text>
 
       <Paper withBorder shadow="sm" p={22} mt={30} radius="md">

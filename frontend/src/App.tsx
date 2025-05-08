@@ -9,6 +9,7 @@ import { Routes, Route } from 'react-router-dom';
 import { SignIn } from './pages/SignIn/SignIn';
 import { HomePage } from './pages/Home.page';
 import { Register } from './pages/Register/Register';
+import { NotFound } from './pages/NotFound/NotFound';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
@@ -25,6 +26,7 @@ export default function App() {
     return (<MantineProvider theme={theme}>
       <Routes >
         <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes >
     </MantineProvider >)
   }
@@ -32,8 +34,9 @@ export default function App() {
   return (
     <MantineProvider theme={theme}>
       <Routes >
-        <Route path="/login" element={<SignIn />} />
+        <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </MantineProvider >
   );
