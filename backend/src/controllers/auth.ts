@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import { encrypt } from "../helpers/helpers";
+import * as cookie from 'cookie'
 
 export class AuthController {
   static async login(req, res) {
@@ -21,8 +22,14 @@ export class AuthController {
         return res.status(404).json({ message: "User not found" });
       }
       const token = encrypt.generateToken(user);
-
-      return res.status(200).json({ message: "Login successful", user, token });
+      res.setHeader(
+        "Set-Cookie",
+        cookie.serialize('token', token, {
+          secure: true, httpOnly: true,
+          maxAge: 60 * 60 * 24 * 7,
+        })
+      )
+      return res.status(200).json({ message: "Login successful", user });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Internal server error" });

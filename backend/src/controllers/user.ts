@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import { encrypt } from "../helpers/helpers";
 import { UserResponse } from "../dto/user";
+import * as cookie from 'cookie'
 
 export class UserController {
   static async signup(req, res) {
@@ -20,9 +20,16 @@ export class UserController {
     userDataSent.email = user.email;
 
     const token = encrypt.generateToken(userDataSent);
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize('token', token, {
+        secure: true, httpOnly: true,
+        maxAge: 60 * 60 * 24 * 7,
+      })
+    )
     return res
       .status(200)
-      .json({ message: "User created successfully", token, userDataSent });
+      .json({ message: "User created successfully", userDataSent });
   }
   static async updateUser(req, res) {
     const { id } = req.params;
