@@ -17,4 +17,8 @@ Router.put(
   authentication,
   UserController.updateUser
 );
+Router.get(
+  "/verify/:id/:emailToken",
+  UserController.verifyEmail
+);
 export { Router as userRouter };

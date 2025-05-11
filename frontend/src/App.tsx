@@ -15,6 +15,7 @@ import { NavBar } from './components/NavBar/NavBar';
 import { AddMovie } from './pages/AddMovie/AddMovie';
 import { FavouritesProvider } from './contexts/FavouritesContext';
 import { MovieShow } from './pages/ShowMovie/ShowMovie';
+import { VerifyEmail } from './pages/VerifyEmail/VerifyEmail';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
@@ -41,6 +42,7 @@ export default function App() {
             <Route path="/movies/create" element={<AddMovie />} />
             <Route path="/movies/:movie_id" element={<MovieShow />} />
             <Route path="/movies/:movie_id/update" element={<AddMovie />} />
+            <Route path="/verified" element={<VerifyEmail />} />
           </Routes >
         </FavouritesProvider>
       </MantineProvider >)
@@ -54,6 +56,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/movies/:movie_id" element={<MovieShow />} />
+        <Route path="/verified" element={<VerifyEmail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MantineProvider >
