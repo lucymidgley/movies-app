@@ -1,5 +1,6 @@
 import Axios from "axios";
 import {
+  Favourite,
   Movie,
   MovieCreateParams,
   SignInResponse,
@@ -26,5 +27,10 @@ export const api = {
     index: async () => (await apiAxios.get<Movie[]>("/auth/movies")).data,
     create: async (data: MovieCreateParams) => (await apiAxios.post<Movie>("/auth/movies", data)).data,
     update: async (movie: Movie) => (await apiAxios.put<Movie>(`/auth/movies/${movie.id}`, { movie })).data,
+  },
+  favourites: {
+    index: async () => (await apiAxios.get<Favourite[]>("/auth/favourites")).data,
+    create: async (data: { movie_id: Movie['id'] }) => (await apiAxios.post<Favourite>("/auth/favourites", data)).data,
+    delete: async (id: Favourite['id']) => (await apiAxios.delete<void>(`/auth/favourites/${id}`)),
   },
 };

@@ -25,7 +25,11 @@ export type MovieCreateParams = {
     year: string
     image: string
 }
+export type Favourite = {
+    id: number
+    user_id: User['id']
+    movie_id: Movie['id']
+}
 export type SignInResponse = {
     user: User
-    token: string
 }

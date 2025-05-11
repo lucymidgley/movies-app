@@ -13,6 +13,7 @@ import { Register } from './pages/Register/Register';
 import { NotFound } from './pages/NotFound/NotFound';
 import { NavBar } from './components/NavBar/NavBar';
 import { AddMovie } from './pages/AddMovie/AddMovie';
+import { FavouritesProvider } from './contexts/FavouritesContext';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
@@ -31,14 +32,16 @@ export default function App() {
   if (!!user) {
     return (
       <MantineProvider theme={theme}>
-        <NavBar />
-        <Routes >
-          <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/add-movie" element={<AddMovie />} />
-          <Route path="/movie/:movie_id" element={<div>Movie info</div>} />
-          <Route path="/movie/:movie_id/update" element={<AddMovie />} />
-        </Routes >
+        <FavouritesProvider>
+          <NavBar />
+          <Routes >
+            <Route path="/" element={<HomePage />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/add-movie" element={<AddMovie />} />
+            <Route path="/movie/:movie_id" element={<div>Movie info</div>} />
+            <Route path="/movie/:movie_id/update" element={<AddMovie />} />
+          </Routes >
+        </FavouritesProvider>
       </MantineProvider >)
   }
 
