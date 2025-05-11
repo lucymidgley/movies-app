@@ -16,3 +16,10 @@
     height: 21px;
     border-radius: 21px;
 }
+
+.subtitle {
+    color: var(--mantine-color-dimmed);
+    font-size: var(--mantine-font-size-md);
+    text-align: center;
+    margin-top: 5px;
+}

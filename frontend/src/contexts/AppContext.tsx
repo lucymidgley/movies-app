@@ -170,6 +170,7 @@ export const asyncActionHandlers: AsyncActionHandlers<
             movies,
           });
           dispatch({ type: "REQUEST_SUCCESS" });
+          window.location.href = "/";
         } catch (e) {
           const error = handleError(e);
           dispatch({ type: "REQUEST_FAILURE", error });

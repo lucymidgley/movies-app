@@ -1,21 +1,24 @@
-import { useState } from 'react';
-import { FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
-import { HiSelector } from "react-icons/hi";
+import { useEffect, useState } from 'react';
+import { FaSearch } from "react-icons/fa";
 import {
+    Anchor,
     Button,
-    Center,
     Group,
     keys,
     ScrollArea,
     Table,
     Text,
     TextInput,
-    UnstyledButton,
 } from '@mantine/core';
-import classes from './MoviesTable.module.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFavouritesContext } from '@/contexts/FavouritesContext';
+import { useAppContext } from '@/contexts/AppContext';
+import { HeartButton } from './HeartButton';
+import { Movie } from '@/types';
+import classes from './MoviesTable.module.css'
 
 interface RowData {
+    id: number
     description: string
     title: string;
     director: string;
@@ -30,164 +33,76 @@ interface ThProps {
     onSort: () => void;
 }
 
-function Th({ children, reversed, sorted, onSort }: ThProps) {
-    const Icon = sorted ? (reversed ? FaChevronUp : FaChevronDown) : HiSelector;
-    return (
-        <Table.Th className={classes.th}>
-            <UnstyledButton onClick={onSort} className={classes.control}>
-                <Group justify="space-between">
-                    <Text fw={500} fz="sm">
-                        {children}
-                    </Text>
-                    <Center className={classes.icon}>
-                        <Icon size={16} />
-                    </Center>
-                </Group>
-            </UnstyledButton>
-        </Table.Th>
-    );
-}
-
-function filterData(data: RowData[], search: string) {
+function filterData(data: Movie[], search: string) {
     const query = search.toLowerCase().trim();
     return data.filter((item) =>
-        keys(data[0]).some((key) => item[key].toLowerCase().includes(query))
+        keys(data[0]).some((key) => (typeof item[key] === 'string' ? item[key].toLowerCase() : item[key].toString()).includes(query))
     );
 }
-
-function sortData(
-    data: RowData[],
-    payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
-    const { sortBy } = payload;
-
-    if (!sortBy) {
-        return filterData(data, payload.search);
-    }
-
-    return filterData(
-        [...data].sort((a, b) => {
-            if (payload.reversed) {
-                return b[sortBy].localeCompare(a[sortBy]);
-            }
-
-            return a[sortBy].localeCompare(b[sortBy]);
-        }),
-        payload.search
-    );
-}
-
-const data = [
-    {
-        "title": "Spirited Away",
-        "description": "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
-        "director": "Hayao Miyazaki",
-        "year": '2001',
-        "rating": '9.5'
-    },
-    {
-        "title": "Parasite",
-        "description": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
-        "director": "Bong Joon-ho",
-        "year": '2019',
-        "rating": '9.0'
-    },
-    {
-        "title": "The Shawshank Redemption",
-        "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-        "director": "Frank Darabont",
-        "year": '1994',
-        "rating": '9.3'
-    },
-    {
-        "title": "Pulp Fiction",
-        "description": "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-        "director": "Quentin Tarantino",
-        "year": '1994',
-        "rating": '8.9'
-    },
-    {
-        "title": "Seven Samurai",
-        "description": "A poor village under attack by bandits hires seven ronin to protect them.",
-        "director": "Akira Kurosawa",
-        "year": '1954',
-        "rating": '9.1'
-    }
-];
 
 export function MoviesTable() {
     const navigate = useNavigate()
+    const { state: { movies } } = useAppContext()
     const [search, setSearch] = useState('');
-    const [sortedData, setSortedData] = useState(data);
-    const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
-    const [reverseSortDirection, setReverseSortDirection] = useState(false);
+    const [filteredData, setFilteredData] = useState(movies);
 
-    const setSorting = (field: keyof RowData) => {
-        const reversed = field === sortBy ? !reverseSortDirection : false;
-        setReverseSortDirection(reversed);
-        setSortBy(field);
-        setSortedData(sortData(data, { sortBy: field, reversed, search }));
-    };
+    const { dispatch, state: { favourites } } = useFavouritesContext();
+    const { state: { user } } = useAppContext();
+
+    useEffect(() => {
+        user && dispatch({ type: "FETCH_FAVOURITES" });
+    }, [user]);
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.currentTarget;
         setSearch(value);
-        setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search: value }));
+        setFilteredData(filterData(movies, value));
     };
 
-    const rows = sortedData.map((row) => (
+    const rows = filteredData.map((row) => (
         <Table.Tr key={row.title}>
             <Table.Td>{row.title}</Table.Td>
             <Table.Td>{row.director}</Table.Td>
             <Table.Td>{row.year}</Table.Td>
             <Table.Td>{row.rating}</Table.Td>
+            {user && <Table.Td><HeartButton movie_id={row.id} /></Table.Td>}
         </Table.Tr>
     ));
 
     return (
-        <ScrollArea>
-            <Group justify="space-between" mt="lg">
+        <ScrollArea p={15}>
+            {!user &&
+                (<Text className={classes.subtitle}>
+                    <Anchor component={Link} to="/login">Sign In</Anchor> to add and choose your favourite movies.
+                </Text>)}
+            <Group justify="space-between" mt="md">
                 <TextInput
                     placeholder="Search by any field"
                     mb="md"
                     leftSection={<FaSearch size={16} />}
                     value={search}
                     onChange={handleSearchChange}
-                    w={100}
+                    w={300}
+                    ml={10}
                 />
-                <Button onClick={() => navigate('/add-movie')} > Add Movie</Button>
+                {user && <Button onClick={() => navigate('/add-movie')} > Add Movie</Button>}
             </Group>
             <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} p={10} layout="fixed">
                 <Table.Tbody>
                     <Table.Tr>
-                        <Th
-                            sorted={sortBy === 'title'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('title')}
-                        >
+                        <Table.Th>
                             Name
-                        </Th>
-                        <Th
-                            sorted={sortBy === 'director'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('director')}
-                        >
+                        </Table.Th>
+                        <Table.Th>
                             Director
-                        </Th>
-                        <Th
-                            sorted={sortBy === 'year'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('year')}
-                        >
+                        </Table.Th>
+                        <Table.Th>
                             Year
-                        </Th>
-                        <Th
-                            sorted={sortBy === 'rating'}
-                            reversed={reverseSortDirection}
-                            onSort={() => setSorting('rating')}
-                        >
-                            Year
-                        </Th>
+                        </Table.Th>
+                        <Table.Th>
+                            Rating
+                        </Table.Th>
+                        {user && <Table.Th />}
                     </Table.Tr>
                 </Table.Tbody>
                 <Table.Tbody>
@@ -195,9 +110,9 @@ export function MoviesTable() {
                         rows
                     ) : (
                         <Table.Tr>
-                            <Table.Td colSpan={Object.keys(data[0]).length}>
+                            <Table.Td colSpan={!!user ? 5 : 4}>
                                 <Text fw={500} ta="center">
-                                    Nothing found
+                                    No movies found.
                                 </Text>
                             </Table.Td>
                         </Table.Tr>
