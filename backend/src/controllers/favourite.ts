@@ -9,7 +9,9 @@ export class FavouriteController {
         }
         const user = req[" currentUser"]
         const favouritesRepository = AppDataSource.getRepository(Favourite);
-        const favourites = await favouritesRepository.find({ select: { user } });
+        const favourites = await favouritesRepository.find({
+            select: { user }
+        });
         return res.status(200).json(favourites)
 
     }

@@ -16,12 +16,18 @@ export class Favourite {
     id: number;
 
     @OneToOne(() => User)
-    @JoinColumn()
+    @JoinColumn({ name: 'user_id' })
     user: User
 
+    @Column()
+    user_id: number;
+
     @OneToOne(() => Movie)
-    @JoinColumn()
+    @JoinColumn({ name: 'movie_id' })
     movie: Movie
+
+    @Column()
+    movie_id: number;
 
     @CreateDateColumn()
     createdAt: Date;
