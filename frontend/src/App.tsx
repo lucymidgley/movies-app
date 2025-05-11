@@ -36,9 +36,11 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme}>
+      <NavBar />
       <Routes >
-        <Route path="/" element={<SignIn />} />
+        <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </MantineProvider >

@@ -11,7 +11,7 @@ import {
     TextInput,
     UnstyledButton,
 } from '@mantine/core';
-import classes from './TableSort.module.css';
+import classes from './MoviesTable.module.css';
 
 interface RowData {
     description: string
@@ -113,7 +113,7 @@ const data = [
     }
 ];
 
-export function TableSort() {
+export function MoviesTable() {
     const [search, setSearch] = useState('');
     const [sortedData, setSortedData] = useState(data);
     const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
