@@ -16,6 +16,8 @@ import { AddMovie } from './pages/AddMovie/AddMovie';
 import { FavouritesProvider } from './contexts/FavouritesContext';
 import { MovieShow } from './pages/ShowMovie/ShowMovie';
 import { VerifyEmail } from './pages/VerifyEmail/VerifyEmail';
+import { ForgotPassword } from './pages/ForgotPassword/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword/ResetPassword';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
@@ -43,6 +45,8 @@ export default function App() {
             <Route path="/movies/:movie_id" element={<MovieShow />} />
             <Route path="/movies/:movie_id/update" element={<AddMovie />} />
             <Route path="/verified" element={<VerifyEmail />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route path="/resetPassword/:passwordToken" element={<ResetPassword />} />
           </Routes >
         </FavouritesProvider>
       </MantineProvider >)
@@ -54,6 +58,8 @@ export default function App() {
       <Routes >
         <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/resetPassword/:passwordToken" element={<ResetPassword />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/movies/:movie_id" element={<MovieShow />} />
         <Route path="/verified" element={<VerifyEmail />} />

@@ -23,6 +23,8 @@ type SyncAction =
 type AsyncAction =
   | { type: "SIGN_UP"; email: string; password: string; name: string }
   | { type: "SIGN_IN"; email: string; password: string }
+  | { type: "FORGOT_PASSWORD"; email: string }
+  | { type: "RESET_PASSWORD"; password: string, passwordToken: string }
   | { type: "FETCH_MOVIES" }
   | {
     type: "ADD_MOVIE";
@@ -82,6 +84,34 @@ export const asyncActionHandlers: AsyncActionHandlers<
             type: "SET_USER",
             user: response?.user,
           });
+          window.location.href = "/";
+        } catch (e) {
+          console.error(e);
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
+  FORGOT_PASSWORD:
+    ({ dispatch }) =>
+      async (action: { email: string }) => {
+        const { email } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          await api.users.forgotPassword({ email });
+          window.location.href = "/";
+        } catch (e) {
+          console.error(e);
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
+  RESET_PASSWORD:
+    ({ dispatch }) =>
+      async (action: { password: string, passwordToken: string }) => {
+        const { password, passwordToken } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          await api.users.resetPassword({ password, passwordToken });
           window.location.href = "/";
         } catch (e) {
           console.error(e);

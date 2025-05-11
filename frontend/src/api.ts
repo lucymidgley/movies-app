@@ -20,6 +20,10 @@ export const api = {
       (await apiAxios.get<User>("/auth/profile")).data,
     signIn: async (data: { email: string; password: string }) =>
       (await apiAxios.post<SignInResponse>("/auth/login", data)).data,
+    forgotPassword: async (data: { email: string }) =>
+      (await apiAxios.post<void>("/auth/forgotPassword", data)),
+    resetPassword: async (data: { password: string, passwordToken: string }) =>
+      (await apiAxios.post<void>("/auth/resetPassword", data)),
     signOut: async () =>
       void (await apiAxios.delete<void>("/auth/signout")),
   },

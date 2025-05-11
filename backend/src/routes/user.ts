@@ -21,4 +21,12 @@ Router.get(
   "/verify/:id/:emailToken",
   UserController.verifyEmail
 );
+Router.post(
+  "/forgotPassword",
+  UserController.forgotPassword
+);
+Router.post(
+  "/resetPassword",
+  UserController.resetPassword
+);
 export { Router as userRouter };

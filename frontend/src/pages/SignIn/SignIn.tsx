@@ -52,7 +52,7 @@ export function SignIn() {
         <TextInput label="Email" placeholder="you@mantine.dev" required radius="md" value={email} onChange={e => setEmail(e.target.value)} />
         <PasswordInput label="Password" placeholder="Your password" required mt="md" radius="md" value={password} onChange={e => setPassword(e.target.value)} />
         <Group justify="space-between" mt="lg">
-          <Anchor component={Link} size="sm" to="/forgot-password">
+          <Anchor component={Link} size="sm" to="/forgotPassword">
             Forgot password?
           </Anchor>
         </Group>
