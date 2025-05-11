@@ -11,5 +11,6 @@ To get started with Film Finder, ensure you have Docker and Docker Compose insta
 
     ```bash
     docker compose build
+    docker compose run --rm backend npm run migration
     docker compose up
     ```
