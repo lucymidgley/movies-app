@@ -45,8 +45,7 @@ export function MoviesTable() {
     const { state: { movies } } = useAppContext()
     const [search, setSearch] = useState('');
     const [filteredData, setFilteredData] = useState(movies);
-
-    const { dispatch, state: { favourites } } = useFavouritesContext();
+    const { dispatch } = useFavouritesContext();
     const { state: { user } } = useAppContext();
 
     useEffect(() => {
@@ -60,8 +59,8 @@ export function MoviesTable() {
     };
 
     const rows = filteredData.map((row) => (
-        <Table.Tr key={row.title}>
-            <Table.Td>{row.title}</Table.Td>
+        <Table.Tr key={row.title} >
+            <Table.Td className={classes.td} onClick={() => navigate(`/movies/${row.id}`)}>{row.title}</Table.Td>
             <Table.Td>{row.director}</Table.Td>
             <Table.Td>{row.year}</Table.Td>
             <Table.Td>{row.rating}</Table.Td>
@@ -71,10 +70,14 @@ export function MoviesTable() {
 
     return (
         <ScrollArea p={15}>
-            {!user &&
-                (<Text className={classes.subtitle}>
-                    <Anchor component={Link} to="/login">Sign In</Anchor> to add and choose your favourite movies.
-                </Text>)}
+            {user ?
+                (
+                    <Text className={classes.subtitle}>
+                        Click on a movie's title to see more information.
+                    </Text>) : (<Text className={classes.subtitle}>
+                        Click on a movie's title to see more information. <Anchor component={Link} to="/login">Sign In</Anchor> to add and choose your favourite movies.
+                    </Text>)
+            }
             <Group justify="space-between" mt="md">
                 <TextInput
                     placeholder="Search by any field"
@@ -85,7 +88,7 @@ export function MoviesTable() {
                     w={300}
                     ml={10}
                 />
-                {user && <Button onClick={() => navigate('/add-movie')} > Add Movie</Button>}
+                {user && <Button onClick={() => navigate('/movies/create')} > Add Movie</Button>}
             </Group>
             <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} p={10} layout="fixed">
                 <Table.Tbody>
@@ -102,7 +105,7 @@ export function MoviesTable() {
                         <Table.Th>
                             Rating
                         </Table.Th>
-                        {user && <Table.Th />}
+                        {user && <Table.Th >Favourites</Table.Th>}
                     </Table.Tr>
                 </Table.Tbody>
                 <Table.Tbody>

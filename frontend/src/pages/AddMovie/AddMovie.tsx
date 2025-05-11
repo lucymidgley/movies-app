@@ -28,12 +28,10 @@ export function AddMovie() {
         state: { loading, error, movies },
     } = useAppContext();
     const navigate = useNavigate()
-    console.log(movies)
     const movie = id ? movies.find(m => m.id === id) : undefined
-    console.log(movie, movies)
     const [title, setTitle] = useState<string>(movie?.title || '')
-    const [description, setDescription] = useState<string>(movie?.title || '')
-    const [director, setDirector] = useState<string>(movie?.description || '')
+    const [description, setDescription] = useState<string>(movie?.description || '')
+    const [director, setDirector] = useState<string>(movie?.director || '')
     const [rating, setRating] = useState<number>(movie?.rating || 0)
     const formattedYear = movie?.year ? (new Date(Number(movie.year), 1, 1)) : undefined
     const [year, setYear] = useState<DateValue | undefined>(formattedYear || undefined)
@@ -80,11 +78,11 @@ export function AddMovie() {
                         <Rating value={rating} onChange={setRating} count={10} color='indigo' />
                     </Group>
                 </Stack>
-                <Group >
+                <Group>
                     <Button type='submit' radius="md" onClick={onSubmit}>
                         {!!movie ? 'Update' : 'Add Movie'}
                     </Button>
-                    <Button radius="md" onClick={() => navigate(-1)}>
+                    <Button radius="md" onClick={() => navigate(-1)} variant='outline'>
                         Cancel
                     </Button>
                 </Group>
