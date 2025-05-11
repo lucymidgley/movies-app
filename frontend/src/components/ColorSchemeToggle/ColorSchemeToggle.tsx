@@ -1,13 +1,23 @@
-import { Button, Group, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, useMantineColorScheme, useComputedColorScheme } from '@mantine/core';
+import { FaMoon, FaSun } from 'react-icons/fa';
 
-export function ColorSchemeToggle() {
+import cx from 'clsx';
+import classes from './ColorSchemeToggle.module.css';
+import { FC } from 'react';
+
+export const ColorSchemeToggle: FC = () => {
   const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
 
   return (
-    <Group justify="center" mt="xl">
-      <Button onClick={() => setColorScheme('light')}>Light</Button>
-      <Button onClick={() => setColorScheme('dark')}>Dark</Button>
-      <Button onClick={() => setColorScheme('auto')}>Auto</Button>
-    </Group>
+    <ActionIcon
+      onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
+      variant="default"
+      size="36px"
+      aria-label="Toggle color scheme"
+    >
+      <FaSun className={cx(classes.icon, classes.light)} />
+      <FaMoon className={cx(classes.icon, classes.dark)} />
+    </ActionIcon>
   );
 }
