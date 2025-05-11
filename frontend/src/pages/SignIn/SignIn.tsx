@@ -1,7 +1,6 @@
 import {
   Anchor,
   Button,
-  Checkbox,
   Container,
   Group,
   LoadingOverlay,
@@ -53,7 +52,6 @@ export function SignIn() {
         <TextInput label="Email" placeholder="you@mantine.dev" required radius="md" value={email} onChange={e => setEmail(e.target.value)} />
         <PasswordInput label="Password" placeholder="Your password" required mt="md" radius="md" value={password} onChange={e => setPassword(e.target.value)} />
         <Group justify="space-between" mt="lg">
-          <Checkbox label="Remember me" />
           <Anchor component={Link} size="sm" to="/forgot-password">
             Forgot password?
           </Anchor>
