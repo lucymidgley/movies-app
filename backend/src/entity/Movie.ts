@@ -17,20 +17,17 @@ export class Movie {
   @Column({ nullable: false })
   description: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   director: string;
 
-  @Column({ nullable: false })
-  year: number;
+  @Column({ nullable: true })
+  year: string;
 
-  @Column({ nullable: false })
-  rating: string;
+  @Column({ nullable: true })
+  rating: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   image: string;
-
-  @Column({ nullable: false })
-  cast: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,5 +1,7 @@
 import Axios from "axios";
 import {
+  Movie,
+  MovieCreateParams,
   SignInResponse,
   User,
   UserCreateParams,
@@ -19,5 +21,10 @@ export const api = {
       (await apiAxios.post<SignInResponse>("/auth/login", data)).data,
     signOut: async () =>
       void (await apiAxios.delete<void>("/auth/signout")),
+  },
+  movies: {
+    index: async () => (await apiAxios.get<Movie[]>("/auth/movies")).data,
+    create: async (data: MovieCreateParams) => (await apiAxios.post<Movie>("/auth/movies", data)).data,
+    update: async (movie: Movie) => (await apiAxios.put<Movie>(`/auth/movies/${movie.id}`, { movie })).data,
   },
 };

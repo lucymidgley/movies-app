@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(errorHandler);
 const { PORT = 8080 } = process.env;
 app.use("/auth", userRouter);
-app.use("/api", movieRouter);
+app.use("/auth", movieRouter);
 
 app.get(/(.*)/, (req: Request, res: Response) => {
   res.status(505).json({ message: "Bad Request" });

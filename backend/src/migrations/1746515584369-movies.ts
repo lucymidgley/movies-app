@@ -8,11 +8,10 @@ export class Movies1746515584369 implements MigrationInterface {
                "id" bigint GENERATED ALWAYS AS IDENTITY,
                 "title" character varying NOT NULL,
                 "description" character varying NOT NULL,
-                "director" character varying NOT NULL,
-                "year" integer NOT NULL,
-                "rating" character varying NOT NULL,
-                "image" character varying NOT NULL,
-                "cast" character varying NOT NULL,
+                "director" character varying,
+                "year" character varying,
+                "rating" integer,
+                "image" character varying,
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now()
               )

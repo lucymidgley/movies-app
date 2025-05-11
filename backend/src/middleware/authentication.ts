@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import * as cookie from 'cookie'
 const JWT_SECRET = "devsecret"

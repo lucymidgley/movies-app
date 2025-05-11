@@ -4,7 +4,12 @@ import { MovieController } from "../controllers/movie";
 
 const Router = express.Router();
 
-Router.get("/movies", authentication, MovieController.getMovies);
+Router.get("/movies", MovieController.getMovies);
 Router.post("/movies", authentication, MovieController.createMovie);
+Router.put(
+    "/movies/:id",
+    authentication,
+    MovieController.updateMovie
+);
 
 export { Router as movieRouter };
