@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
 import { HiSelector } from "react-icons/hi";
 import {
+    Button,
     Center,
     Group,
     keys,
@@ -12,6 +13,7 @@ import {
     UnstyledButton,
 } from '@mantine/core';
 import classes from './MoviesTable.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface RowData {
     description: string
@@ -114,6 +116,7 @@ const data = [
 ];
 
 export function MoviesTable() {
+    const navigate = useNavigate()
     const [search, setSearch] = useState('');
     const [sortedData, setSortedData] = useState(data);
     const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
@@ -143,14 +146,18 @@ export function MoviesTable() {
 
     return (
         <ScrollArea>
-            <TextInput
-                placeholder="Search by any field"
-                mb="md"
-                leftSection={<FaSearch size={16} />}
-                value={search}
-                onChange={handleSearchChange}
-            />
-            <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} layout="fixed">
+            <Group justify="space-between" mt="lg">
+                <TextInput
+                    placeholder="Search by any field"
+                    mb="md"
+                    leftSection={<FaSearch size={16} />}
+                    value={search}
+                    onChange={handleSearchChange}
+                    w={100}
+                />
+                <Button onClick={() => navigate('/add-movie')} > Add Movie</Button>
+            </Group>
+            <Table horizontalSpacing="md" verticalSpacing="xs" miw={700} p={10} layout="fixed">
                 <Table.Tbody>
                     <Table.Tr>
                         <Th
@@ -197,6 +204,6 @@ export function MoviesTable() {
                     )}
                 </Table.Tbody>
             </Table>
-        </ScrollArea>
+        </ScrollArea >
     );
 }

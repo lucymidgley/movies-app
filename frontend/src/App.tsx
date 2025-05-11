@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import { theme } from './theme';
@@ -11,16 +12,20 @@ import { HomePage } from './pages/Home.page';
 import { Register } from './pages/Register/Register';
 import { NotFound } from './pages/NotFound/NotFound';
 import { NavBar } from './components/NavBar/NavBar';
+import { AddMovie } from './pages/AddMovie/AddMovie';
 
 export default function App() {
   const { dispatch, state: { user } } = useAppContext();
   useEffect(() => {
     const getLogin = async (): Promise<void> => {
       const currentLogin = await api.users.show();
-      console.log(currentLogin)
       dispatch({ type: "SET_USER", user: currentLogin });
     };
     getLogin();
+  }, []);
+
+  useEffect(() => {
+    dispatch({ type: "FETCH_MOVIES" });
   }, []);
 
   if (!!user) {
@@ -30,6 +35,9 @@ export default function App() {
         <Routes >
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/add-movie" element={<AddMovie />} />
+          <Route path="/movie/:movie_id" element={<div>Movie info</div>} />
+          <Route path="/movie/:movie_id/update" element={<AddMovie />} />
         </Routes >
       </MantineProvider >)
   }

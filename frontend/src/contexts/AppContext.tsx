@@ -2,13 +2,14 @@ import { createContext, Dispatch, FC, ReactNode, Reducer, useContext } from "rea
 import { AsyncActionHandlers, useReducerAsync } from "use-reducer-async";
 import { api } from '../api';
 import { handleError } from "../helpers/errorHandler";
-import { User } from "../types";
+import { Movie, User } from "../types";
 
 
 export type PageState = {
   loading: boolean;
   error: string | null;
   user: User | null;
+  movies: Movie[]
 };
 
 type SyncAction =
@@ -16,11 +17,23 @@ type SyncAction =
   | { type: "REQUEST_FAILURE"; error: string }
   | { type: "REQUEST_SUCCESS" }
   | { type: "SET_USER"; user: User | null }
+  | { type: "SET_MOVIES"; movies: Movie[] }
   | { type: "CLEAN_ALL" };
 
 type AsyncAction =
   | { type: "SIGN_UP"; email: string; password: string; name: string }
   | { type: "SIGN_IN"; email: string; password: string }
+  | { type: "FETCH_MOVIES" }
+  | {
+    type: "ADD_MOVIE";
+    title: string
+    description: string
+    director: string
+    rating: number
+    year: string
+    image: string
+  }
+  | { type: "UPDATE_MOVIE"; movie: Movie }
   | { type: "SIGN_OUT" }
 
 type Action = SyncAction | AsyncAction;
@@ -29,6 +42,7 @@ export const initialState: PageState = {
   user: null,
   loading: false,
   error: null,
+  movies: []
 };
 
 export const reducer: Reducer<PageState, SyncAction> = (
@@ -38,6 +52,8 @@ export const reducer: Reducer<PageState, SyncAction> = (
   switch (action.type) {
     case "SET_USER":
       return { ...state, user: action.user, loading: false, error: null };
+    case "SET_MOVIES":
+      return { ...state, movies: action.movies, loading: false, error: null };
     case "BEGIN_REQUEST":
       return { ...state, loading: true, error: null };
     case "REQUEST_SUCCESS":
@@ -90,6 +106,22 @@ export const asyncActionHandlers: AsyncActionHandlers<
           dispatch({ type: "REQUEST_FAILURE", error });
         }
       },
+  FETCH_MOVIES:
+    ({ dispatch }) =>
+      async () => {
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          const movies = await api.movies.index();
+          dispatch({
+            type: "SET_MOVIES",
+            movies,
+          });
+        } catch (e) {
+          console.error(e);
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
   SIGN_UP:
     ({ dispatch }) =>
       async (action: { email: string; password: string; name: string }) => {
@@ -101,6 +133,61 @@ export const asyncActionHandlers: AsyncActionHandlers<
             type: "REQUEST_SUCCESS",
           });
           window.location.href = "/";
+        } catch (e) {
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
+  ADD_MOVIE:
+    ({ dispatch }) =>
+      async (action: {
+        title: string
+        description: string
+        director: string
+        rating: number
+        year: string
+        image: string
+      }) => {
+        const { title,
+          description,
+          director,
+          rating,
+          year,
+          image } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          await api.movies.create({
+            description,
+            director,
+            rating,
+            year,
+            image,
+            title
+          });
+          const movies = await api.movies.index();
+          dispatch({
+            type: "SET_MOVIES",
+            movies,
+          });
+          dispatch({ type: "REQUEST_SUCCESS" });
+        } catch (e) {
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
+  UPDATE_MOVIE:
+    ({ dispatch }) =>
+      async (action: { movie: Movie }) => {
+        const { movie } = action;
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          await api.movies.update(movie);
+          const movies = await api.movies.index();
+          dispatch({
+            type: "SET_MOVIES",
+            movies,
+          });
+          dispatch({ type: "REQUEST_SUCCESS" });
         } catch (e) {
           const error = handleError(e);
           dispatch({ type: "REQUEST_FAILURE", error });
