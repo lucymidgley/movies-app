@@ -11,6 +11,7 @@ Router.get(
 );
 Router.post("/signup", UserController.signup);
 Router.post("/login", AuthController.login);
+Router.delete("/signout", authentication, AuthController.signOut);
 Router.put(
   "/update/:id",
   authentication,

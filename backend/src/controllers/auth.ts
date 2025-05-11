@@ -46,4 +46,18 @@ export class AuthController {
     });
     return res.status(200).json({ ...user, password: undefined });
   }
+
+  static async signOut(req, res) {
+    if (!req[" currentUser"]) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize('token', null, {
+        secure: true, httpOnly: true,
+        maxAge: 0,
+      })
+    )
+    return res.status(200).json({ message: "Logout successful" });
+  }
 }

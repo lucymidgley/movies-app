@@ -1,22 +1,34 @@
-import { Autocomplete, Button, Group } from '@mantine/core';
-import classes from './HeaderSearch.module.css';
-import { FaSearch } from "react-icons/fa";
+import {
+    Box,
+    Button,
+    Group,
+} from '@mantine/core';
+import classes from './NavBar.module.css';
+import { LuPopcorn } from "react-icons/lu";
+import { useAppContext } from '@/contexts/AppContext';
+import { useEffect } from 'react';
 
 
 export function NavBar() {
+    const { dispatch } = useAppContext();
+
+    useEffect(() => () => dispatch({ type: "CLEAN_ALL" }), [dispatch]);
+
+    const onSubmit = () => {
+        dispatch({ type: "SIGN_OUT" });
+    }
+
     return (
-        <header className={classes.header}>
-            <div className={classes.inner}>
-                <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
-                    <Autocomplete
-                        className={classes.search}
-                        placeholder="Search"
-                        leftSection={<FaSearch size={16} />}
-                        visibleFrom="xs"
-                    />
-                    <Button >Sign Out</Button>
+        <Box pb={120}>
+            <header className={classes.header}>
+                <Group justify="space-between" h="100%">
+                    <LuPopcorn />
+
+                    <Group visibleFrom="sm">
+                        <Button onClick={onSubmit}>Sign Out</Button>
+                    </Group>
                 </Group>
-            </div>
-        </header>
-    )
+            </header>
+        </Box>
+    );
 }

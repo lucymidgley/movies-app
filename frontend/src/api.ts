@@ -17,5 +17,7 @@ export const api = {
       (await apiAxios.get<User>("/auth/profile")).data,
     signIn: async (data: { email: string; password: string }) =>
       (await apiAxios.post<SignInResponse>("/auth/login", data)).data,
+    signOut: async () =>
+      void (await apiAxios.delete<void>("/auth/signout")),
   },
 };

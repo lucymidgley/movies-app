@@ -21,6 +21,7 @@ type SyncAction =
 type AsyncAction =
   | { type: "SIGN_UP"; email: string; password: string; name: string }
   | { type: "SIGN_IN"; email: string; password: string }
+  | { type: "SIGN_OUT" }
 
 type Action = SyncAction | AsyncAction;
 
@@ -64,6 +65,23 @@ export const asyncActionHandlers: AsyncActionHandlers<
           dispatch({
             type: "SET_USER",
             user: response?.user,
+          });
+          window.location.href = "/";
+        } catch (e) {
+          console.error(e);
+          const error = handleError(e);
+          dispatch({ type: "REQUEST_FAILURE", error });
+        }
+      },
+  SIGN_OUT:
+    ({ dispatch }) =>
+      async () => {
+        dispatch({ type: "BEGIN_REQUEST" });
+        try {
+          const response = await api.users.signOut();
+          dispatch({
+            type: "SET_USER",
+            user: null,
           });
           window.location.href = "/";
         } catch (e) {
