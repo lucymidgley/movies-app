@@ -5,7 +5,7 @@ export class Movies1746515584369 implements MigrationInterface {
     await queryRunner.query(`
             --Table Definition
             CREATE TABLE "movies"  (
-               "id" bigint GENERATED ALWAYS AS IDENTITY,
+               "id" SERIAL PRIMARY KEY,
                 "title" character varying NOT NULL,
                 "description" character varying NOT NULL,
                 "director" character varying,

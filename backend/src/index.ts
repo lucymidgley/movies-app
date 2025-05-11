@@ -6,6 +6,7 @@ import { userRouter } from "./routes/user";
 import { movieRouter } from "./routes/movie";
 import "reflect-metadata";
 import { errorHandler } from "./middleware/errorHandler";
+import { favouriteRouter } from "./routes/favourite";
 dotenv.config();
 const cors = require('cors')
 
@@ -21,6 +22,7 @@ app.use(errorHandler);
 const { PORT = 8080 } = process.env;
 app.use("/auth", userRouter);
 app.use("/auth", movieRouter);
+app.use("/auth", favouriteRouter);
 
 app.get(/(.*)/, (req: Request, res: Response) => {
   res.status(505).json({ message: "Bad Request" });

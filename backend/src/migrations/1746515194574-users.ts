@@ -6,7 +6,7 @@ export class Users1746515194574 implements MigrationInterface {
       ` 
                 --Table Definition
                 CREATE TABLE "users"  (
-                  "id" bigint GENERATED ALWAYS AS IDENTITY,
+                  "id" SERIAL PRIMARY KEY,
                   "name" character varying NOT NULL,
                   "email" character varying NOT NULL,
                   "password" character varying NOT NULL,
