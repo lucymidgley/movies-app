@@ -15,6 +15,7 @@ import classes from '../SignIn/SignIn.module.css';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
+import { ErrorMessage } from '@/components/ErrorMessage/ErrorMessage';
 
 export function Register() {
   const [name, setName] = useState<string>('')
@@ -32,9 +33,9 @@ export function Register() {
     dispatch({ type: "SIGN_UP", email, password, name });
   }
 
-
   return (
     <Container size={420} my={40}>
+      {error && <ErrorMessage error={error} />}
       <LoadingOverlay
         visible={loading}
         zIndex={1000}

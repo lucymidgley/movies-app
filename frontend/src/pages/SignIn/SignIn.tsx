@@ -15,6 +15,7 @@ import classes from './SignIn.module.css';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
+import { ErrorMessage } from '@/components/ErrorMessage/ErrorMessage';
 
 export function SignIn() {
   const [password, setPassword] = useState<string>('')
@@ -33,6 +34,7 @@ export function SignIn() {
 
   return (
     <Container size={420} my={40}>
+      {error && <ErrorMessage error={error} />}
       <LoadingOverlay
         visible={loading}
         zIndex={1000}
